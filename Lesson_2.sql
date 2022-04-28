@@ -109,4 +109,82 @@ from CJ1
 RIGHT JOIN CJ2
 on CJ1.RNO = CJ2.RNO;
 
+-- INDEX
+create index BI1 on EMP(City);
+drop index BI1 on EMP;
 
+-- Composite Index
+create index BI1 on EMP(City, Addr);
+
+-- IMPLICIT INDEX - Automatically created when Primary Key/ Unique is defined.
+-- EXPLICIT INDEX - Created by the user
+
+-- CLUSTERED INDEX (Automatically created if Primary Key is defined)
+-- NON CLUSTERED INDEX
+
+create view DAH_EMP as
+(select * from EMP where Addr = 'Dahisar');
+
+select * from DAH_EMP;
+
+drop view DAH_EMP;
+delete from EMP where EID = 'E0011';
+
+create view DAH_EMP as
+(select * from EMP where Addr = 'Dahisar') with check option;
+
+insert into DAH_EMP values ('E0011', 'Saurabh', 'Borivali', 'Mumbai', '1996-10-22', '8850361577', 'msaurabh@gmail.com');
+
+select count(*) from EMP;
+
+select count(EID) from EMP_SAL;
+
+select count(Salary) from EMP_SAL;
+
+select max(Salary), min(Salary), sum(salary), avg(salary) from EMP_SAL;
+
+select sqrt(25);
+
+select rand();
+
+select CONCAT('HELLO', " WORLD");
+
+select * from EMP;
+
+select EID, NAME, CONCAT(Addr, ', ', City) as 'Address' from EMP;
+
+select ASCII('A');
+
+SELECT left('WELCOME', 4);
+SELECT right('WELCOME', 4);
+
+select character_length('WELCOME');
+SELECT lower('WELCOME');
+
+select substr('WELCOME', 2,3);
+
+select replace('LIFT', 'L', 'S');
+
+select reverse('ABHI');
+
+select insert('ABCDEFGH', 4, 3, 'XYZ');
+
+select locate(' ','Abhishek Narayanan');
+
+select EID, NAME, left(NAME, locate(' ', NAME)) as F_NAME from EMP_SAL;
+
+select EID, NAME, right(NAME, (char_length(NAME) - locate(' ', NAME))) as L_NAME from EMP_SAL;
+
+-- DATE FUNCTIONS
+select current_date();
+
+select adddate(current_date(), 10), adddate(current_date(), interval 4 month), adddate(current_date(), interval 3 year);
+
+select EID, NAME, DOB, adddate(DOB, 90) as 'CONFIRMATION DATE' from EMP; 
+
+select EID, NAME, DOB, datediff(current_date(), DOB)/365 as CURRENT_AGE from EMP;
+
+select day(current_date()) as Day, month(current_date()) as Month, year(current_date()) as Year;
+
+select * from EMP
+where year(DOB) = 1996;
