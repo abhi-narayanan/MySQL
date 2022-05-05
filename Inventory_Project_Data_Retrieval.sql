@@ -66,13 +66,44 @@ create procedure ADDORDER(A char(5), B char(5), C char(5), D int)
 begin
 	declare E date;
     set E = current_date();
-	insert into ORDERS
-    values (A, E, B, C, D);
+	
+    if D <= (select SQTY from STOCK where PID = C) then
+		insert into ORDERS
+		values (A, E, B, C, D);
+        select 'Order was placed.';
+        select * from ORDERS where OID = A;
+	
+    else
+		select 'Order was not placed. Insufficient stock.';
     
-    select * from ORDERS where OID = A;
+	end if;
+    
 end;
 
 $$
 delimiter ;
 
-call ADDORDER('O0006', 'C0004', 'P0008', 5);
+drop procedure ADDORDER;
+
+call ADDORDER('O0009', 'C0001', 'P0006', 10);
+
+show triggers;
+select * from ORDERS;
+
+delimiter $$
+
+create trigger before_orders_insert before insert
+on ORDERS
+for each row
+begin
+	update STOCK set SQTY = SQTY - new.OQTY
+    where PID = new.PID;
+end $$
+
+delimiter ;
+drop trigger before_orders_insert;
+select * from ORDERS;
+
+select * from STOCK;
+
+call ADDORDER('O0010', 'C0003', 'P0004', 20);

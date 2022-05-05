@@ -35,8 +35,8 @@ foreign key (SID) references SUPPLIER(SID));
 create table ORDERS
 (OID char(5) unique,
 ODATE date,
-CID char(5) unique,
-PID char(5) unique,
+CID char(5),
+PID char(5),
 OQTY int,
 check (OQTY >= 1),
 foreign key (PID) references PRODUCT(PID),
@@ -51,3 +51,10 @@ check (SQTY >= 0),
 check (ROL > 0),
 check (MOQ >= 5),
 foreign key (PID) references PRODUCT(PID));
+
+
+drop table PRODUCT;
+drop table ORDERS;
+drop table SUPPLIER;
+drop table STOCK;
+drop table CUST;
